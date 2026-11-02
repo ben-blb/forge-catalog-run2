@@ -22,6 +22,14 @@ node_modules: pnpm-lock.yaml
 
 gen build lint test: node_modules
 
+# El cliente de Prisma está ignorado por git: en un clon limpio lo crea este target, no `make gen`.
+# Regla del pack: todo target funciona en un clon limpio.
+apps/api/generated/prisma: apps/api/prisma/*.prisma node_modules
+	pnpm --filter api exec prisma generate
+	@touch $@
+
+lint test: apps/api/generated/prisma
+
 gen:
 	node tools/gen/index.ts
 	pnpm --filter api exec prisma generate
