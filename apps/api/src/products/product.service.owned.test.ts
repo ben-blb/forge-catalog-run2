@@ -15,6 +15,23 @@ function setup() {
   return { repo, service: new ProductService(repo) };
 }
 
+describe('REQ-003', () => {
+  it('REQ-003.AC1 guarda motivo y fecha de descontinuación', async () => {
+    const { service } = setup();
+    const p = await service.create(input);
+    const out = await service.discontinue(p.id, { reason: 'obsoleto' });
+    expect(out.discontinueReason).toBe('obsoleto');
+    expect(out.discontinuedAt).toBeInstanceOf(Date);
+  });
+
+  it('REQ-003.AC2 borra supplierEmail', async () => {
+    const { repo, service } = setup();
+    const p = await service.create({ ...input, supplierEmail: 'a@b.com' });
+    await service.discontinue(p.id, { reason: 'obsoleto' });
+    expect((await repo.findById(p.id))?.supplierEmail).toBeNull();
+  });
+});
+
 describe('REQ-001', () => {
   it('REQ-001.AC1 crea un producto y lo devuelve', async () => {
     const { service } = setup();
