@@ -1,0 +1,8 @@
+# Generado por `make gen`. No editar.
+openapi: 3.1.0
+info:
+  title: API
+  version: "1"
+paths: {}
+components:
+  schemas: {}

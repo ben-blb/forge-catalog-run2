@@ -1,0 +1,4 @@
+// Generado por `make gen`. No editar.
+datasource db {
+  provider = "postgresql"
+}
