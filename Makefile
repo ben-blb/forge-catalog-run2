@@ -2,6 +2,8 @@
 PROJECT ?= forge-catalog-run2
 TAG ?= $(shell git rev-parse --short HEAD)
 export PROJECT TAG
+# Compose nombra el proyecto por la carpeta; el deploy corre desde un worktree, así que se fija aquí.
+export COMPOSE_PROJECT_NAME := $(PROJECT)
 
 COMMA := ,
 SEMGREP = docker run --rm -v $(CURDIR):/src -w /src semgrep/semgrep:1.183.0
@@ -20,7 +22,7 @@ node_modules: pnpm-lock.yaml
 	pnpm install --frozen-lockfile
 	@touch node_modules
 
-gen build lint test: node_modules
+gen lint test: node_modules
 
 # El cliente de Prisma está ignorado por git: en un clon limpio lo crea este target, no `make gen`.
 # Regla del pack: todo target funciona en un clon limpio.
