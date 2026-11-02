@@ -1,8 +1,4 @@
-import {
-  ConflictException,
-  Injectable,
-  NotImplementedException,
-} from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import type {
   ProductCreate,
   ProductDiscontinueInput,
@@ -20,9 +16,14 @@ export class ProductService extends ProductServiceBase {
   }
 
   async discontinue(
-    _id: string,
-    _input: ProductDiscontinueInput,
+    id: string,
+    input: ProductDiscontinueInput,
   ): Promise<ProductRow> {
-    throw new NotImplementedException();
+    await this.read(id);
+    return this.repo.update(id, {
+      discontinueReason: input.reason,
+      discontinuedAt: new Date(),
+      supplierEmail: null,
+    });
   }
 }
