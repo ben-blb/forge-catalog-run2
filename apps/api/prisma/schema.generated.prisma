@@ -2,3 +2,21 @@
 datasource db {
   provider = "postgresql"
 }
+
+model Category {
+  id String @db.Uuid @id @default(uuid())
+  name String @unique
+  products Product[] @relation("Product_category")
+}
+
+model Product {
+  id String @db.Uuid @id @default(uuid())
+  sku String @unique
+  name String
+  price Decimal
+  categoryId String @db.Uuid
+  category Category @relation("Product_category", fields: [categoryId], references: [id])
+  discontinuedAt DateTime?
+  discontinueReason String? @db.Text
+  supplierEmail String?
+}

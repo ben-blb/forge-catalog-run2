@@ -3,6 +3,286 @@ openapi: 3.1.0
 info:
   title: API
   version: "1"
-paths: {}
+paths:
+  /categories:
+    post:
+      summary: Crear Category
+      x-req: &a1
+        - REQ-001
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CategoryCreate"
+      responses:
+        "201":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+        "400":
+          description: Input inválido
+    get:
+      summary: Listar Category
+      x-req: *a1
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+        "400":
+          description: Input inválido
+  /categories/{id}:
+    get:
+      summary: Leer Category
+      x-req: *a1
+      parameters: &a3
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+        "400":
+          description: Input inválido
+        "404":
+          description: No existe
+  /products:
+    post:
+      summary: Crear Product
+      x-req: &a2
+        - REQ-001
+        - REQ-002
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductCreate"
+      responses:
+        "201":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "400":
+          description: Input inválido
+    get:
+      summary: Listar Product
+      x-req: *a2
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+        "400":
+          description: Input inválido
+  /products/{id}:
+    get:
+      summary: Leer Product
+      x-req: *a2
+      parameters: *a3
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "400":
+          description: Input inválido
+        "404":
+          description: No existe
+    patch:
+      summary: Actualizar Product
+      x-req: *a2
+      parameters: *a3
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductUpdate"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "400":
+          description: Input inválido
+        "404":
+          description: No existe
+    delete:
+      summary: Eliminar Product
+      x-req: *a2
+      parameters: *a3
+      responses:
+        "204":
+          description: Sin contenido
+        "400":
+          description: Input inválido
+        "404":
+          description: No existe
+  /products/{id}/discontinue:
+    post:
+      summary: Discontinue Product
+      x-req:
+        - REQ-003
+      parameters: *a3
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductDiscontinueInput"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "400":
+          description: Input inválido
+        "404":
+          description: No existe
 components:
-  schemas: {}
+  schemas:
+    Category:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+      required:
+        - id
+        - name
+    CategoryCreate:
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+        - name
+    CategoryUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        sku:
+          type: string
+        name:
+          type: string
+        price:
+          type: string
+          pattern: ^-?\d+(\.\d+)?$
+        categoryId:
+          type: string
+          format: uuid
+        discontinuedAt:
+          oneOf:
+            - type: string
+              format: date-time
+            - type: "null"
+        discontinueReason:
+          oneOf:
+            - type: string
+            - type: "null"
+      required:
+        - id
+        - sku
+        - name
+        - price
+        - categoryId
+    ProductCreate:
+      type: object
+      properties:
+        sku:
+          type: string
+        name:
+          type: string
+        price:
+          type: string
+          pattern: ^-?\d+(\.\d+)?$
+        categoryId:
+          type: string
+          format: uuid
+        discontinuedAt:
+          oneOf:
+            - type: string
+              format: date-time
+            - type: "null"
+        discontinueReason:
+          oneOf:
+            - type: string
+            - type: "null"
+        supplierEmail:
+          oneOf:
+            - type: string
+            - type: "null"
+      required:
+        - sku
+        - name
+        - price
+        - categoryId
+    ProductUpdate:
+      type: object
+      properties:
+        sku:
+          type: string
+        name:
+          type: string
+        price:
+          type: string
+          pattern: ^-?\d+(\.\d+)?$
+        categoryId:
+          type: string
+          format: uuid
+        discontinuedAt:
+          oneOf:
+            - type: string
+              format: date-time
+            - type: "null"
+        discontinueReason:
+          oneOf:
+            - type: string
+            - type: "null"
+        supplierEmail:
+          oneOf:
+            - type: string
+            - type: "null"
+    ProductDiscontinueInput:
+      type: object
+      properties:
+        reason:
+          type: string
+      required:
+        - reason
