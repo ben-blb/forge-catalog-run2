@@ -1,2 +1,22 @@
 ir: 1
-entities: {}
+entities:
+  Category:
+    x-req: [REQ-001]
+    fields:
+      id: uuid pk
+      name: string unique
+    ops: [create, read, list]
+  Product:
+    x-req: [REQ-001, REQ-002]
+    fields:
+      id: uuid pk
+      sku: string unique
+      name: string
+      price: decimal
+      categoryId: ref Category
+      discontinuedAt: datetime optional
+      discontinueReason: text optional
+      supplierEmail: string optional pii
+    ops: [create, read, update, delete, list]
+    actions:
+      discontinue: {x-req: [REQ-003], in: {reason: string}, out: Product}

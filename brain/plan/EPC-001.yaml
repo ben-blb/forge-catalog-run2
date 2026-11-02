@@ -1,0 +1,57 @@
+id: EPC-001
+title: Catálogo
+status: approved
+derives_from: [REQ-001, REQ-002, REQ-003]
+stories:
+  - id: STY-001
+    title: Alta de producto
+    derives_from: [REQ-001]
+    tasks:
+      - id: TSK-001
+        level: L0
+        risk: low
+        intent: Generar API y cliente web de Category y Product desde el IR
+        files: ["apps/**/*.generated.*", "apps/**/*.owned.*", "apps/api/prisma/**"]
+        accept: ["make test"]
+        deps: []
+        subtasks: []
+      - id: TSK-002
+        level: L1
+        risk: low
+        intent: Rechazar SKU duplicado al crear producto con error de conflicto
+        files: ["apps/api/src/products/**/*.owned.ts"]
+        accept: ["make test T=REQ-001"]
+        deps: [TSK-001]
+        subtasks: [regla en servicio, test REQ-001.AC1, test REQ-001.AC2]
+  - id: STY-002
+    title: Descontinuar producto
+    derives_from: [REQ-003]
+    tasks:
+      - id: TSK-003
+        level: L1
+        risk: high
+        intent: Implementar discontinue; guarda motivo y fecha y borra supplierEmail
+        files: ["apps/api/src/products/**/*.owned.ts"]
+        accept: ["make test T=REQ-003"]
+        deps: [TSK-001]
+        subtasks: [handler de discontinue, test REQ-003.AC1, test REQ-003.AC2]
+  - id: STY-003
+    title: Lista de productos
+    derives_from: [REQ-002]
+    tasks:
+      - id: TSK-004
+        level: L1
+        risk: low
+        intent: Construir la pantalla SCR-001 con sus estados
+        files: ["apps/web/src/products/**/*.owned.tsx"]
+        accept: ["make test T=REQ-002.AC1"]
+        deps: [TSK-001]
+        subtasks: [pantalla y estados, test REQ-002.AC1]
+      - id: TSK-005
+        level: L1
+        risk: low
+        intent: Mostrar el stock disponible en cada fila de la lista
+        files: ["apps/web/src/products/**/*.owned.tsx"]
+        accept: ["make test T=REQ-002.AC2"]
+        deps: [TSK-001]
+        subtasks: [columna de stock, test REQ-002.AC2]
