@@ -2,7 +2,6 @@
 id: ARC-001
 type: arch
 title: Arquitectura del catálogo
-status: approved
 derives_from: [REQ-001, REQ-002, REQ-003]
 stack_pack: nestjs-react@1
 ---

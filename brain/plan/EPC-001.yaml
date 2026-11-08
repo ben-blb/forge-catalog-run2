@@ -1,6 +1,5 @@
 id: EPC-001
 title: Catálogo
-status: approved
 derives_from: [REQ-001, REQ-002, REQ-003]
 stories:
   - id: STY-001

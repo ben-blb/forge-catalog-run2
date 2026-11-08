@@ -2,7 +2,6 @@
 id: BRF-001
 type: brief
 title: Catálogo de productos
-status: approved
 derives_from: []
 mode: standard
 ---
