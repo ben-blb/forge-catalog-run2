@@ -201,6 +201,10 @@ components:
           type: string
         name:
           type: string
+        stock:
+          oneOf:
+            - type: integer
+            - type: "null"
         price:
           type: string
           pattern: ^-?\d+(\.\d+)?$
@@ -229,6 +233,10 @@ components:
           type: string
         name:
           type: string
+        stock:
+          oneOf:
+            - type: integer
+            - type: "null"
         price:
           type: string
           pattern: ^-?\d+(\.\d+)?$
@@ -260,6 +268,10 @@ components:
           type: string
         name:
           type: string
+        stock:
+          oneOf:
+            - type: integer
+            - type: "null"
         price:
           type: string
           pattern: ^-?\d+(\.\d+)?$

@@ -5,6 +5,7 @@ import { z } from 'zod';
 export const ProductCreate = z.object({
   sku: z.string(),
   name: z.string(),
+  stock: z.int().nullish(),
   price: z.string().regex(/^-?\d+(\.\d+)?$/),
   categoryId: z.uuid(),
   discontinuedAt: z.iso.datetime().pipe(z.coerce.date()).nullish(),
@@ -22,6 +23,7 @@ export const ProductResponse = z.object({
   id: z.uuid(),
   sku: z.string(),
   name: z.string(),
+  stock: z.int().nullable(),
   price: z.coerce.string(),
   categoryId: z.uuid(),
   discontinuedAt: z
