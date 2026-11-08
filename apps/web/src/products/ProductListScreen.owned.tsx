@@ -36,6 +36,7 @@ export function ProductListScreen() {
           <th>Nombre</th>
           <th>Precio</th>
           <th>Categoría</th>
+          <th>Stock disponible</th>
         </tr>
       </thead>
       <tbody>
@@ -45,6 +46,7 @@ export function ProductListScreen() {
             <td>{p.name}</td>
             <td>{p.price}</td>
             <td>{categoryNames.get(p.categoryId) ?? ''}</td>
+            <td>{p.stock === null ? '' : Math.trunc(p.stock)}</td>
           </tr>
         ))}
       </tbody>

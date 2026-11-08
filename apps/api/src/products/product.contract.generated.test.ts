@@ -11,6 +11,7 @@ const MISSING = '3f2b8c1e-5a4d-4e6f-9b7a-1c2d3e4f5a6b';
 const valid = {
   sku: 'x',
   name: 'x',
+  stock: 1,
   price: '1.50',
   categoryId: '3f2b8c1e-5a4d-4e6f-9b7a-1c2d3e4f5a6b',
   discontinuedAt: '2024-01-31T12:00:00.000Z',

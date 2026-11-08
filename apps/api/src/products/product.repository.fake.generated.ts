@@ -13,6 +13,7 @@ export class ProductRepositoryFake implements ProductRepositoryApi {
 
   async create(data: ProductCreate) {
     const row = {
+      stock: null,
       discontinuedAt: null,
       discontinueReason: null,
       supplierEmail: null,

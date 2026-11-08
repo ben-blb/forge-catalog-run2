@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { categoryApi } from '../api/category.generated';
@@ -17,7 +17,10 @@ function renderScreen() {
   );
 }
 
-afterEach(() => vi.restoreAllMocks());
+afterEach(() => {
+  cleanup();
+  vi.restoreAllMocks();
+});
 
 describe('REQ-002.AC1', () => {
   it('REQ-002.AC1 muestra carga', () => {
@@ -52,6 +55,7 @@ describe('REQ-002.AC1', () => {
         id: 'p1',
         sku: 'SKU-1',
         name: 'Tornillo',
+        stock: 7,
         price: '9.50',
         categoryId: 'c1',
         discontinuedAt: null,
@@ -66,5 +70,41 @@ describe('REQ-002.AC1', () => {
     expect(screen.getByText('Tornillo')).toBeTruthy();
     expect(screen.getByText('9.50')).toBeTruthy();
     expect(await screen.findByText('Ferretería')).toBeTruthy();
+  });
+});
+
+describe('REQ-002.AC2', () => {
+  it('REQ-002.AC2 muestra el stock de cada fila', async () => {
+    vi.spyOn(productApi, 'list').mockResolvedValue([
+      {
+        id: 'p1',
+        sku: 'SKU-1',
+        name: 'Tornillo',
+        stock: 42,
+        price: '9.50',
+        categoryId: 'c1',
+        discontinuedAt: null,
+        discontinueReason: null,
+      },
+      {
+        id: 'p2',
+        sku: 'SKU-2',
+        name: 'Tuerca',
+        stock: null,
+        price: '1.00',
+        categoryId: 'c1',
+        discontinuedAt: null,
+        discontinueReason: null,
+      },
+    ]);
+    vi.spyOn(categoryApi, 'list').mockResolvedValue([
+      { id: 'c1', name: 'Ferretería' },
+    ]);
+    renderScreen();
+    expect(await screen.findByText('Stock disponible')).toBeTruthy();
+    expect(screen.getByText('42')).toBeTruthy();
+    const rows = screen.getAllByRole('row');
+    const cells = rows[2].querySelectorAll('td');
+    expect(cells[4].textContent).toBe('');
   });
 });

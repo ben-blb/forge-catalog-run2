@@ -13,6 +13,7 @@ model Product {
   id String @db.Uuid @id @default(uuid())
   sku String @unique
   name String
+  stock Int?
   price Decimal
   categoryId String @db.Uuid
   category Category @relation("Product_category", fields: [categoryId], references: [id])

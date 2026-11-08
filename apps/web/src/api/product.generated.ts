@@ -8,6 +8,7 @@ export type Product = {
   id: string;
   sku: string;
   name: string;
+  stock: number | null;
   price: string;
   categoryId: string;
   discontinuedAt: string | null;
@@ -17,6 +18,7 @@ export type Product = {
 export type ProductCreate = {
   sku: string;
   name: string;
+  stock?: number | null;
   price: string;
   categoryId: string;
   discontinuedAt?: string | null;
