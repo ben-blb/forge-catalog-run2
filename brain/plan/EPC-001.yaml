@@ -52,5 +52,13 @@ stories:
         intent: Mostrar el stock disponible en cada fila de la lista
         files: ["apps/web/src/products/**/*.owned.tsx"]
         accept: ["make test T=REQ-002.AC2"]
-        deps: [TSK-001]
+        deps: [TSK-001, TSK-006]
         subtasks: [columna de stock, test REQ-002.AC2]
+      - id: TSK-006
+        level: L0
+        risk: low
+        intent: "Regenerar el código desde el IR: campo stock en Product"
+        files: ["apps/**/*.generated.*", "apps/**/*.owned.*", "apps/api/prisma/**"]
+        accept: ["make gen produce el diff de stock y make lint test pasa"]
+        deps: []
+        subtasks: []

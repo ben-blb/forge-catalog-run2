@@ -12,6 +12,7 @@ entities:
       id: uuid pk
       sku: string unique
       name: string
+      stock: int optional
       price: decimal
       categoryId: ref Category
       discontinuedAt: datetime optional
