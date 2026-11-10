@@ -18,6 +18,13 @@ import { fake } from './writers/fake.ts';
 import { openapi } from './writers/openapi.ts';
 import { prismaSchema } from './writers/prisma.ts';
 import { repository } from './writers/repository.ts';
+import {
+  readScreens,
+  routesFile,
+  routesTest,
+  ScreenError,
+  screenStub,
+} from './writers/routes.ts';
 import { serviceBase, serviceOwned } from './writers/service.ts';
 import { requestFile, web } from './writers/web.ts';
 
@@ -35,14 +42,27 @@ try {
   process.exit(1);
 }
 
+let screens: ReturnType<typeof readScreens>;
+try {
+  screens = readScreens(join(root, 'brain/scr'));
+} catch (err) {
+  if (!(err instanceof ScreenError)) throw err;
+  console.error(err.message);
+  process.exit(1);
+}
+
 // 1. Qué se genera (ruta relativa -> contenido).
 const generated = new Map<string, string>([
   ['apps/api/prisma/schema.generated.prisma', prismaSchema(model)],
   ['apps/api/openapi.generated.yaml', openapi(model)],
   ['apps/api/src/modules.generated.ts', modulesFile(model)],
   ['apps/web/src/api/request.generated.ts', requestFile],
+  ['apps/web/src/routes.generated.tsx', routesFile(screens)],
+  ['apps/web/src/routes.generated.test.tsx', routesTest(screens)],
 ]);
 const owned = new Map<string, string>();
+for (const s of screens)
+  owned.set(`apps/web/src/screens/${s.component}.owned.tsx`, screenStub(s));
 for (const e of model.entities) {
   const api = `apps/api/src/${e.dir}/${e.stem}`;
   generated.set(`${api}.dto.generated.ts`, dto(e, model));
@@ -82,7 +102,7 @@ for (const [rel, content] of owned) {
 }
 
 // 4. Formatea lo escrito (Biome) para que los diffs sean estables.
-const ts = written.filter((f) => f.endsWith('.ts'));
+const ts = written.filter((f) => /\.tsx?$/.test(f));
 if (ts.length) {
   execFileSync('pnpm', ['exec', 'biome', 'check', '--write', ...ts], {
     cwd: root,
@@ -90,5 +110,5 @@ if (ts.length) {
   });
 }
 console.log(
-  `gen: ${model.entities.length} entidades, ${generated.size} archivos generados, ${owned.size} stubs owned`,
+  `gen: ${model.entities.length} entidades, ${screens.length} pantallas, ${generated.size} archivos generados, ${owned.size} stubs owned`,
 );
