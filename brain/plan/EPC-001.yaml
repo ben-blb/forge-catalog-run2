@@ -54,3 +54,10 @@ stories:
         accept: ["make test T=REQ-002.AC2"]
         deps: [TSK-001]
         subtasks: [columna de stock, test REQ-002.AC2]
+      - id: TSK-007
+        level: L1
+        risk: low
+        intent: "Mover (no copiar) ProductListScreen y su test de apps/web/src/products/ a apps/web/src/screens/, reemplazando el stub; borrar los archivos de products/"
+        files: ["apps/web/src/screens/*.owned.tsx", "apps/web/src/products/*.owned.tsx"]
+        accept: ["make test"]
+        deps: [TSK-005]
