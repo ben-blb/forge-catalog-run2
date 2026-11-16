@@ -58,6 +58,6 @@ stories:
         level: L1
         risk: low
         intent: "Mover (no copiar) ProductListScreen y su test de apps/web/src/products/ a apps/web/src/screens/, reemplazando el stub; borrar los archivos de products/"
-        files: ["apps/web/src/screens/*.owned.tsx", "apps/web/src/products/*.owned.tsx"]
+        files: ["apps/web/src/screens/*.owned.tsx", "apps/web/src/products/*.owned.tsx", "apps/web/src/products/*.owned.test.tsx"]
         accept: ["make test"]
         deps: [TSK-005]
